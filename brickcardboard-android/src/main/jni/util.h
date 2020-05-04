@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Google Inc. All Rights Reserved.
+ * Forked from Google sample
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef HELLO_CARDBOARD_ANDROID_SRC_MAIN_JNI_UTIL_H_
-#define HELLO_CARDBOARD_ANDROID_SRC_MAIN_JNI_UTIL_H_
+#ifndef CARDBOARD_BRICK_ANDROID_SRC_MAIN_JNI_UTIL_H_
+#define CARDBOARD_BRICK_ANDROID_SRC_MAIN_JNI_UTIL_H_
 
 #include <android/asset_manager.h>
 #include <jni.h>
@@ -185,4 +185,4 @@ class Texture {
 
 }  // namespace ndk_hello_cardboard
 
-#endif  // HELLO_CARDBOARD_ANDROID_SRC_MAIN_JNI_UTIL_H_
+#endif  // CARDBOARD_BRICK_ANDROID_SRC_MAIN_JNI_UTIL_H_
