@@ -12,3 +12,4 @@ build
 .externalNativeBuild
 libraries
 local.properties
+.cxx

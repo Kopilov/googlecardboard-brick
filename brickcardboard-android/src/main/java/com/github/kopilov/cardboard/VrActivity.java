@@ -1,4 +1,6 @@
 /*
+ * Forked from com.google.cardboard.VrActivity
+ *
  * Copyright 2019 Google Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.cardboard;
+package com.github.kopilov.cardboard;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -35,13 +37,14 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.PopupMenu;
 import android.widget.Toast;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * A Google Cardboard VR NDK sample application.
+ * A Google Cardboard VR NDK application, forked from official sample.
  *
- * <p>This is the main Activity for the sample application. It initializes a GLSurfaceView to allow
+ * <p>This is the main Activity for the application. It initializes a GLSurfaceView to allow
  * rendering.
  */
 public class VrActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {

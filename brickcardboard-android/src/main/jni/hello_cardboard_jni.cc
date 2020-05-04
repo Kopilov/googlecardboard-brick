@@ -23,7 +23,7 @@
 
 #define JNI_METHOD(return_type, method_name) \
   JNIEXPORT return_type JNICALL              \
-      Java_com_google_cardboard_VrActivity_##method_name
+      Java_com_github_kopilov_cardboard_VrActivity_##method_name
 
 namespace {
 

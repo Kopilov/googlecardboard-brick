@@ -2,12 +2,12 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name"
             description="Application name. [CHAR_LIMIT=30]">
-            Hello Cardboard</string>
+            Cardboard Brick</string>
 
     <!-- Strings present in 'VR' activity -->
     <string name="title_activity_vr"
             description="VR activity title. [CHAR_LIMIT=30]">
-            Hello Cardboard</string>
+            Cardboard Brick</string>
     <string name="no_permissions"
             description="Text shown on Android Toast when permissions are not granted.
                          [CHAR_LIMIT=30]">
