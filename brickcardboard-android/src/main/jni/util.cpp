@@ -29,7 +29,7 @@
 
 #include <GLES2/gl2.h>
 
-namespace ndk_hello_cardboard {
+namespace ndk_cardboard {
 
 namespace {
 
@@ -539,9 +539,9 @@ bool Texture::Initialize(JNIEnv* env, jobject java_asset_mgr,
 }
 
 void Texture::Bind() const {
-  HELLOCARDBOARD_CHECK(texture_id_ != 0);
+  CARDBOARD_CHECK(texture_id_ != 0);
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, texture_id_);
 }
 
-}  // namespace ndk_hello_cardboard
+}  // namespace ndk_cardboard

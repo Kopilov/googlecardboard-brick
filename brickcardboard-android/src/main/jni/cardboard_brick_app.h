@@ -30,13 +30,13 @@
 #include "cardboard.h"
 #include "util.h"
 
-namespace ndk_hello_cardboard {
+namespace ndk_cardboard {
 
 /**
  * This is a sample app for the Cardboard SDK. It loads a simple environment and
  * objects that you can click on.
  */
-class HelloCardboardApp {
+class CardboardBrickApp {
  public:
   /**
    * Creates a HelloCardboardApp.
@@ -45,9 +45,9 @@ class HelloCardboardApp {
    * @param obj Android activity object.
    * @param asset_mgr_obj The asset manager object.
    */
-  HelloCardboardApp(JavaVM* vm, jobject obj, jobject asset_mgr_obj);
+  CardboardBrickApp(JavaVM* vm, jobject obj, jobject asset_mgr_obj);
 
-  ~HelloCardboardApp();
+  ~CardboardBrickApp();
 
   /**
    * Initializes any GL-related objects. This should be called on the rendering
@@ -186,6 +186,6 @@ class HelloCardboardApp {
   int cur_target_object_;
 };
 
-}  // namespace ndk_hello_cardboard
+}  // namespace ndk_cardboard
 
 #endif  // HELLO_CARDBOARD_ANDROID_SRC_MAIN_JNI_HELLO_CARDBOARD_APP_H_

@@ -29,13 +29,13 @@
 #define LOGW(...) __android_log_print(ANDROID_LOG_WARN, LOG_TAG, __VA_ARGS__)
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
-#define HELLOCARDBOARD_CHECK(condition)                                    \
+#define CARDBOARD_CHECK(condition)                                    \
   if (!(condition)) {                                                      \
     LOGE("*** CHECK FAILED at %s:%d: %s", __FILE__, __LINE__, #condition); \
     abort();                                                               \
   }
 
-namespace ndk_hello_cardboard {
+namespace ndk_cardboard {
 
 class Matrix4x4 {
  public:
@@ -183,6 +183,6 @@ class Texture {
   GLuint texture_id_;
 };
 
-}  // namespace ndk_hello_cardboard
+}  // namespace ndk_cardboard
 
 #endif  // CARDBOARD_BRICK_ANDROID_SRC_MAIN_JNI_UTIL_H_

@@ -27,12 +27,12 @@
 
 namespace {
 
-inline jlong jptr(ndk_hello_cardboard::HelloCardboardApp* native_app) {
+inline jlong jptr(ndk_cardboard::CardboardBrickApp* native_app) {
   return reinterpret_cast<intptr_t>(native_app);
 }
 
-inline ndk_hello_cardboard::HelloCardboardApp* native(jlong ptr) {
-  return reinterpret_cast<ndk_hello_cardboard::HelloCardboardApp*>(ptr);
+inline ndk_cardboard::CardboardBrickApp* native(jlong ptr) {
+  return reinterpret_cast<ndk_cardboard::CardboardBrickApp*>(ptr);
 }
 
 JavaVM* javaVm;
@@ -48,7 +48,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 
 JNI_METHOD(jlong, nativeOnCreate)
 (JNIEnv* env, jobject obj, jobject asset_mgr) {
-  return jptr(new ndk_hello_cardboard::HelloCardboardApp(javaVm, obj, asset_mgr));
+  return jptr(new ndk_cardboard::CardboardBrickApp(javaVm, obj, asset_mgr));
 }
 
 JNI_METHOD(void, nativeOnDestroy)
