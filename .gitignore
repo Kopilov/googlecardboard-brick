@@ -1,0 +1,14 @@
+# IntelliJ
+.idea
+*.ipr
+*.iml
+*.iws
+
+# Gradle
+.gradle
+build
+
+# Android and NDK
+.externalNativeBuild
+libraries
+local.properties
