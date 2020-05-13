@@ -14,8 +14,15 @@ android {
         }
         externalNativeBuild {
             cmake {
-                cppFlags "-std=gnu++11"
-                arguments "-DANDROID_STL=c++_shared"
+                arguments "-DANDROID_STL=c++_shared",
+                          "-DASSIMP_BUILD_ZLIB=ON",
+                          "-DASSIMP_BUILD_OBJ_IMPORTER=ON",
+                          "-DASSIMP_NO_EXPORT=ON",
+                          "-DASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT=OFF",
+                          "-DASSIMP_BUILD_TESTS=OFF",
+                          "-DBUILD_SHARED_LIBS=OFF",
+                          "-DCMAKE_BUILD_TYPE=Release"
+                cppFlags "-fexceptions -frtti -std=gnu++11"
             }
         }
     }

@@ -1,3 +1,6 @@
 [submodule "sdk"]
 	path = sdk
 	url = ../sdk
+[submodule "brickcardboard-android/src/main/jni/assimp"]
+	path = brickcardboard-android/src/main/jni/assimp
+	url = https://github.com/assimp/assimp
