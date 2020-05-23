@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10.0)
 # Standard Android dependencies
 find_library(android-lib android)
 find_library(EGL-lib EGL)
-find_library(GLESv2-lib GLESv2)
+find_library(GLESv3-lib GLESv3)
 find_library(log-lib log)
 
 add_subdirectory(src/main/jni/assimp)
@@ -21,7 +21,7 @@ target_include_directories(cardboard_jni PRIVATE ${libs_dir} src/main/jni/assimp
 target_link_libraries(cardboard_jni
     ${android-lib}
     ${EGL-lib}
-    ${GLESv2-lib}
+    ${GLESv3-lib}
     ${log-lib}
     assimp
     ${libs_dir}/jni/${ANDROID_ABI}/libcardboard_api.so)

@@ -23,7 +23,7 @@
 #include <array>
 #include <vector>
 
-#include <GLES2/gl2.h>
+#include <GLES3/gl3.h>
 
 #define LOG_TAG "HelloCardboardApp"
 #define LOGW(...) __android_log_print(ANDROID_LOG_WARN, LOG_TAG, __VA_ARGS__)
