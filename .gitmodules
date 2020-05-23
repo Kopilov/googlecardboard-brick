@@ -4,3 +4,6 @@
 [submodule "brickcardboard-android/src/main/jni/assimp"]
 	path = brickcardboard-android/src/main/jni/assimp
 	url = https://github.com/assimp/assimp
+[submodule "brickcardboard-android/src/main/jni/glm"]
+	path = brickcardboard-android/src/main/jni/glm
+	url = https://github.com/g-truc/glm
