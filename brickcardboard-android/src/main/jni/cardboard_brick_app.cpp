@@ -100,19 +100,19 @@ CardboardBrickApp::CardboardBrickApp(JavaVM* vm, jobject obj, jobject asset_mgr_
   asset_mgr_ = AAssetManager_fromJava(env, asset_mgr_obj);
   Cardboard_initializeAndroid(vm, obj);
   head_tracker_ = CardboardHeadTracker_create();
-  model = new Model(getAssetLocation(env, obj, "brick.obj"));
-  shader = new Shader(getAssetLocation(env, obj, "vertexShader.gl").c_str(), getAssetLocation(env, obj, "fragmentShader.gl").c_str());
+  model = nullptr;
+  shader = nullptr;
 }
 
 CardboardBrickApp::~CardboardBrickApp() {
-  delete shader;
-  delete model;
+  if (shader != nullptr) delete shader;
+  if (model != nullptr) delete model;
   CardboardHeadTracker_destroy(head_tracker_);
   CardboardLensDistortion_destroy(lens_distortion_);
   CardboardDistortionRenderer_destroy(distortion_renderer_);
 }
 
-void CardboardBrickApp::OnSurfaceCreated(JNIEnv* env) {
+void CardboardBrickApp::OnSurfaceCreated(JNIEnv* env, jobject activityObject) {
   const int obj_vertex_shader =
       LoadGLShader(GL_VERTEX_SHADER, kObjVertexShaders);
   const int obj_fragment_shader =
@@ -158,6 +158,11 @@ void CardboardBrickApp::OnSurfaceCreated(JNIEnv* env) {
   // Target object first appears directly in front of user.
   model_target_ = GetTranslationMatrix({0.0f, 1.5f, kMinTargetDistance});
 
+  model = new Model(getAssetLocation(env, activityObject, "brick.obj"));
+  shader = new Shader(
+      getAssetLocation(env, activityObject, "vertexShader.gl").c_str(),
+      getAssetLocation(env, activityObject, "fragmentShader.gl").c_str()
+  );
   CHECKGLERROR("OnSurfaceCreated");
 }
 
@@ -167,7 +172,7 @@ void CardboardBrickApp::SetScreenParams(int width, int height) {
   screen_params_changed_ = true;
 }
 
-void CardboardBrickApp::OnDrawFrame() {
+void CardboardBrickApp::OnDrawFrame(long timestamp) {
   if (!UpdateDeviceParams()) {
     return;
   }
@@ -176,8 +181,8 @@ void CardboardBrickApp::OnDrawFrame() {
   head_view_ = GetPose();
 
   // Incorporate the floor height into the head_view
-  head_view_ =
-      head_view_ * GetTranslationMatrix({0.0f, kDefaultFloorHeight, 0.0f});
+//  head_view_ =
+//      head_view_ * GetTranslationMatrix({0.0f, kDefaultFloorHeight, 0.0f});
 
   // Bind buffer
   glBindFramebuffer(GL_FRAMEBUFFER, framebuffer_);
@@ -204,7 +209,9 @@ void CardboardBrickApp::OnDrawFrame() {
     modelview_projection_room_ = projection_matrix * eye_view;
 
     // Draw room and target
-    DrawWorld();
+//    DrawWorld();
+    DrawBrick(timestamp, glm::make_mat4(eye_view.ToGlArray().data()), glm::make_mat4(projection_matrices_[eye]));
+//    DrawBrick(timestamp, glm::make_mat4(head_view_.ToGlArray().data()), glm::make_mat4(projection_matrices_[eye]));
   }
 
   // Render
@@ -374,7 +381,6 @@ Matrix4x4 CardboardBrickApp::GetPose() {
 void CardboardBrickApp::DrawWorld() {
   DrawRoom();
   DrawTarget();
-//  DrawBrick();
 }
 
 void CardboardBrickApp::DrawTarget() {
@@ -407,19 +413,31 @@ void CardboardBrickApp::DrawRoom() {
   CHECKGLERROR("DrawRoom");
 }
 
-//void CardboardBrickApp::DrawBrick() {
-//  shader.use();
-////  shader.setMat4("model", glm::value_ptr(m));
-////  shader.setMat4("view", glm::value_ptr(view));
-////  shader.setMat4("projection", (const GLfloat*)p);
-//  shader.setVec3("lightPos", 2.0, 2.0, -3.0);
-//
-//  shader.setVec3("light.ambient",  0.2f, 0.2f, 0.2f);
-//  shader.setVec3("light.diffuse",  1.0f, 1.0f, 1.0f);
-//  shader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-//
-//  model.Draw(shader);
-//}
+void CardboardBrickApp::DrawBrick(long timestamp, glm::mat4 v, glm::mat4 p) {
+  float ratio = 1.0;
+  glm::mat4 pL = glm::perspective(1.8f, ratio, 0.001f, 60.0f);
+
+  glm::mat4 m = glm::mat4(1.0f);
+  m = glm::translate(m, glm::vec3(-1.0f, 0.0f, -5.0f));
+  float timeR = ((float)(timestamp % 3000000000L)) / 1000.0f;
+  m = glm::rotate(m, timeR * 2, glm::vec3(1.0f, 0.0f, 0.0f));
+  m = glm::rotate(m, timeR / 2, glm::vec3(0.0f, 1.0f, 0.0f));
+
+  glm::mat4 vL = glm::mat4(1.0f);
+
+  shader->use();
+  shader->setMat4("model", glm::value_ptr(m));
+  shader->setMat4("view", glm::value_ptr(v));
+  shader->setMat4("projection", glm::value_ptr(p));
+  shader->setVec3("lightPos", 2.0, 2.0, -3.0);
+
+  shader->setVec3("light.ambient",  0.2f, 0.2f, 0.2f);
+  shader->setVec3("light.diffuse",  1.0f, 1.0f, 1.0f);
+  shader->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+  model->Draw(*shader);
+  CHECKGLERROR("DrawBrick");
+}
 
 void CardboardBrickApp::HideTarget() {
   cur_target_object_ = RandomUniformInt(kTargetMeshCount);

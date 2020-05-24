@@ -56,7 +56,7 @@ class CardboardBrickApp {
    *
    * @param env The JNI environment.
    */
-  void OnSurfaceCreated(JNIEnv* env);
+  void OnSurfaceCreated(JNIEnv* env, jobject activityObject);
 
   /**
    * Sets screen parameters.
@@ -69,7 +69,7 @@ class CardboardBrickApp {
   /**
    * Draws the scene. This should be called on the rendering thread.
    */
-  void OnDrawFrame();
+  void OnDrawFrame(long timestamp);
 
   /**
    * Hides the target object if it's being targeted.
@@ -134,7 +134,7 @@ class CardboardBrickApp {
   /**
    * Draws the brick
    */
-  void DrawBrick();
+  void DrawBrick(long timestamp, glm::mat4 v, glm::mat4 p);
 
   /**
    * Finds a new random position for the target object.

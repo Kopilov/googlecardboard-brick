@@ -40,6 +40,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -172,7 +173,7 @@ public class VrActivity extends AppCompatActivity implements PopupMenu.OnMenuIte
 
     @Override
     public void onDrawFrame(GL10 gl10) {
-      nativeOnDrawFrame(nativeApp);
+      nativeOnDrawFrame(nativeApp, new Date().getTime());
     }
   }
 
@@ -256,7 +257,7 @@ public class VrActivity extends AppCompatActivity implements PopupMenu.OnMenuIte
 
   private native void nativeOnSurfaceCreated(long nativeApp);
 
-  private native void nativeOnDrawFrame(long nativeApp);
+  private native void nativeOnDrawFrame(long nativeApp, long timestamp);
 
   private native void nativeOnTriggerEvent(long nativeApp);
 

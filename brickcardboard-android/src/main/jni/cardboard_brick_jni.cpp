@@ -56,12 +56,12 @@ JNI_METHOD(void, nativeOnDestroy)
 
 JNI_METHOD(void, nativeOnSurfaceCreated)
 (JNIEnv* env, jobject obj, jlong native_app) {
-  native(native_app)->OnSurfaceCreated(env);
+  native(native_app)->OnSurfaceCreated(env, obj);
 }
 
 JNI_METHOD(void, nativeOnDrawFrame)
-(JNIEnv* env, jobject obj, jlong native_app) {
-  native(native_app)->OnDrawFrame();
+(JNIEnv* env, jobject obj, jlong native_app, jlong  timestamp) {
+  native(native_app)->OnDrawFrame(timestamp);
 }
 
 JNI_METHOD(void, nativeOnTriggerEvent)
