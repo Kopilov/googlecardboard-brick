@@ -27,6 +27,7 @@
 #include <sstream>
 #include <string>
 
+#include <GLES3/gl3.h>
 namespace ndk_cardboard {
 
 namespace {

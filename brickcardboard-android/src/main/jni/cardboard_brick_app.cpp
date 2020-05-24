@@ -92,17 +92,21 @@ CardboardBrickApp::CardboardBrickApp(JavaVM* vm, jobject obj, jobject asset_mgr_
       target_object_meshes_(kTargetMeshCount),
       target_object_not_selected_textures_(kTargetMeshCount),
       target_object_selected_textures_(kTargetMeshCount),
-      cur_target_object_(RandomUniformInt(kTargetMeshCount)) {
+      cur_target_object_(RandomUniformInt(kTargetMeshCount)
+  ) {
   JNIEnv* env;
   vm->GetEnv((void**)&env, JNI_VERSION_1_6);
   java_asset_mgr_ = env->NewGlobalRef(asset_mgr_obj);
   asset_mgr_ = AAssetManager_fromJava(env, asset_mgr_obj);
-
   Cardboard_initializeAndroid(vm, obj);
   head_tracker_ = CardboardHeadTracker_create();
+  model = new Model(getAssetLocation(env, obj, "brick.obj"));
+  shader = new Shader(getAssetLocation(env, obj, "vertexShader.gl").c_str(), getAssetLocation(env, obj, "fragmentShader.gl").c_str());
 }
 
 CardboardBrickApp::~CardboardBrickApp() {
+  delete shader;
+  delete model;
   CardboardHeadTracker_destroy(head_tracker_);
   CardboardLensDistortion_destroy(lens_distortion_);
   CardboardDistortionRenderer_destroy(distortion_renderer_);
@@ -370,6 +374,7 @@ Matrix4x4 CardboardBrickApp::GetPose() {
 void CardboardBrickApp::DrawWorld() {
   DrawRoom();
   DrawTarget();
+//  DrawBrick();
 }
 
 void CardboardBrickApp::DrawTarget() {
@@ -401,6 +406,20 @@ void CardboardBrickApp::DrawRoom() {
 
   CHECKGLERROR("DrawRoom");
 }
+
+//void CardboardBrickApp::DrawBrick() {
+//  shader.use();
+////  shader.setMat4("model", glm::value_ptr(m));
+////  shader.setMat4("view", glm::value_ptr(view));
+////  shader.setMat4("projection", (const GLfloat*)p);
+//  shader.setVec3("lightPos", 2.0, 2.0, -3.0);
+//
+//  shader.setVec3("light.ambient",  0.2f, 0.2f, 0.2f);
+//  shader.setVec3("light.diffuse",  1.0f, 1.0f, 1.0f);
+//  shader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+//
+//  model.Draw(shader);
+//}
 
 void CardboardBrickApp::HideTarget() {
   cur_target_object_ = RandomUniformInt(kTargetMeshCount);

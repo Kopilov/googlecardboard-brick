@@ -29,6 +29,7 @@
 #include <GLES3/gl3.h>
 #include "cardboard.h"
 #include "util.h"
+#include "mesh.h"
 
 namespace ndk_cardboard {
 
@@ -131,6 +132,11 @@ class CardboardBrickApp {
   void DrawRoom();
 
   /**
+   * Draws the brick
+   */
+  void DrawBrick();
+
+  /**
    * Finds a new random position for the target object.
    */
   void HideTarget();
@@ -184,6 +190,21 @@ class CardboardBrickApp {
   std::vector<Texture> target_object_not_selected_textures_;
   std::vector<Texture> target_object_selected_textures_;
   int cur_target_object_;
+
+  Model *model;
+
+  std::string getAssetLocation(JNIEnv* env, jobject obj, const char* assetName) {
+    jmethodID getCopiedAssetPath = env->GetMethodID(env->GetObjectClass(obj), "getCopiedAssetPath", "(Ljava/lang/String;)Ljava/lang/String;");//Java_com_github_kopilov_cardboard_VrActivity_getCopiedAssetPath
+    jstring assetPath = (jstring) env->CallObjectMethod(obj, getCopiedAssetPath, env->NewStringUTF(assetName));
+    jboolean isCopy;
+    const char* assetPath_ = env->GetStringUTFChars(assetPath, &isCopy);
+    if (isCopy == JNI_TRUE) {
+      env->ReleaseStringUTFChars(assetPath, assetPath_);
+    }
+    return std::string(assetPath_);
+  }
+
+    Shader *shader;
 };
 
 }  // namespace ndk_cardboard

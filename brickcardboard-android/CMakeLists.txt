@@ -15,6 +15,7 @@ set(libs_dir ${CMAKE_CURRENT_SOURCE_DIR}/libraries)
 file(GLOB native_srcs "src/main/jni/*.cpp")
 # Output binary
 add_library(cardboard_jni SHARED ${native_srcs})
+#add_library(mesh STATIC mesh.cpp)
 # Includes
 target_include_directories(cardboard_jni PRIVATE ${libs_dir} src/main/jni/assimp/include src/main/jni/glm)
 # Build

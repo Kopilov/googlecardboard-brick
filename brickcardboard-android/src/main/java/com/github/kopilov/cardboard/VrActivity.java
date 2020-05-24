@@ -38,6 +38,9 @@ import android.view.WindowManager;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -48,8 +51,14 @@ import javax.microedition.khronos.opengles.GL10;
  * rendering.
  */
 public class VrActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+  //arrayListOf("brick.obj", "brick.mtl")
+  static ArrayList<String> copyFromAssetsToFS =  new ArrayList<>();
   static {
     System.loadLibrary("cardboard_jni");
+    copyFromAssetsToFS.add("brick.obj");
+    copyFromAssetsToFS.add("brick.mtl");
+    copyFromAssetsToFS.add("fragmentShader.gl");
+    copyFromAssetsToFS.add("vertexShader.gl");
   }
 
   private static final String TAG = VrActivity.class.getSimpleName();
@@ -63,11 +72,16 @@ public class VrActivity extends AppCompatActivity implements PopupMenu.OnMenuIte
 
   private GLSurfaceView glView;
 
+  public String getCopiedAssetPath(String originalName) {
+    return getApplicationContext().getExternalFilesDir(null).getAbsolutePath() + File.separator + originalName;
+  }
+
   @SuppressLint("ClickableViewAccessibility")
   @Override
   public void onCreate(Bundle savedInstance) {
     super.onCreate(savedInstance);
 
+    new Util().copyAssets(getApplicationContext(), copyFromAssetsToFS);
     nativeApp = nativeOnCreate(getAssets());
 
     setContentView(R.layout.activity_vr);
