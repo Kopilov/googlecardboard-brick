@@ -191,7 +191,7 @@ class CardboardBrickApp {
   std::vector<Texture> target_object_selected_textures_;
   int cur_target_object_;
 
-  Model *model;
+  Model *modelTop, *modelBottom, *modelLeft, *modelRight, *modelFront, *modelBack;
 
   std::string getAssetLocation(JNIEnv* env, jobject obj, const char* assetName) {
     jmethodID getCopiedAssetPath = env->GetMethodID(env->GetObjectClass(obj), "getCopiedAssetPath", "(Ljava/lang/String;)Ljava/lang/String;");//Java_com_github_kopilov_cardboard_VrActivity_getCopiedAssetPath

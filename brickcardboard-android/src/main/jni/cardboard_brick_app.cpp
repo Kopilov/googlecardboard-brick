@@ -100,13 +100,23 @@ CardboardBrickApp::CardboardBrickApp(JavaVM* vm, jobject obj, jobject asset_mgr_
   asset_mgr_ = AAssetManager_fromJava(env, asset_mgr_obj);
   Cardboard_initializeAndroid(vm, obj);
   head_tracker_ = CardboardHeadTracker_create();
-  model = nullptr;
+  modelTop = nullptr;
+  modelBottom = nullptr;
+  modelLeft = nullptr;
+  modelRight = nullptr;
+  modelFront = nullptr;
+  modelBack = nullptr;
   shader = nullptr;
 }
 
 CardboardBrickApp::~CardboardBrickApp() {
   if (shader != nullptr) delete shader;
-  if (model != nullptr) delete model;
+  if (modelTop != nullptr) delete modelTop;
+  if (modelBottom != nullptr) delete modelBottom;
+  if (modelLeft != nullptr) delete modelLeft;
+  if (modelRight != nullptr) delete modelRight;
+  if (modelFront != nullptr) delete modelFront;
+  if (modelBack != nullptr) delete modelBack;
   CardboardHeadTracker_destroy(head_tracker_);
   CardboardLensDistortion_destroy(lens_distortion_);
   CardboardDistortionRenderer_destroy(distortion_renderer_);
@@ -158,7 +168,12 @@ void CardboardBrickApp::OnSurfaceCreated(JNIEnv* env, jobject activityObject) {
   // Target object first appears directly in front of user.
   model_target_ = GetTranslationMatrix({0.0f, 1.5f, kMinTargetDistance});
 
-  model = new Model(getAssetLocation(env, activityObject, "brick.obj"));
+  modelTop = new Model(getAssetLocation(env, activityObject, "brick.obj"));
+  modelBottom = new Model(getAssetLocation(env, activityObject, "brick.obj"));
+  modelLeft = new Model(getAssetLocation(env, activityObject, "brick.obj"));
+  modelRight = new Model(getAssetLocation(env, activityObject, "brick.obj"));
+  modelFront = new Model(getAssetLocation(env, activityObject, "brick.obj"));
+  modelBack = new Model(getAssetLocation(env, activityObject, "brick.obj"));
   shader = new Shader(
       getAssetLocation(env, activityObject, "vertexShader.gl").c_str(),
       getAssetLocation(env, activityObject, "fragmentShader.gl").c_str()
@@ -415,27 +430,61 @@ void CardboardBrickApp::DrawRoom() {
 
 void CardboardBrickApp::DrawBrick(long timestamp, glm::mat4 v, glm::mat4 p) {
   float ratio = 1.0;
-  glm::mat4 pL = glm::perspective(1.8f, ratio, 0.001f, 60.0f);
 
-  glm::mat4 m = glm::mat4(1.0f);
-  m = glm::translate(m, glm::vec3(-1.0f, 0.0f, -5.0f));
+  glm::mat4 m;
   float timeR = ((float)(timestamp % 3000000000L)) / 1000.0f;
-  m = glm::rotate(m, timeR * 2, glm::vec3(1.0f, 0.0f, 0.0f));
-  m = glm::rotate(m, timeR / 2, glm::vec3(0.0f, 1.0f, 0.0f));
-
-  glm::mat4 vL = glm::mat4(1.0f);
 
   shader->use();
-  shader->setMat4("model", glm::value_ptr(m));
   shader->setMat4("view", glm::value_ptr(v));
   shader->setMat4("projection", glm::value_ptr(p));
-  shader->setVec3("lightPos", 2.0, 2.0, -3.0);
+  shader->setVec3("lightPos", 0.0, 3.0, 0.0);
 
   shader->setVec3("light.ambient",  0.2f, 0.2f, 0.2f);
   shader->setVec3("light.diffuse",  1.0f, 1.0f, 1.0f);
   shader->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
-  model->Draw(*shader);
+  m = glm::mat4(1.0f);
+  m = glm::translate(m, glm::vec3(0.0f, 5.0f, 0.0f));
+  m = glm::rotate(m, timeR * 2, glm::vec3(1.0f, 0.0f, 0.0f));
+  m = glm::rotate(m, timeR / 2, glm::vec3(0.0f, 1.0f, 0.0f));
+  shader->setMat4("model", glm::value_ptr(m));
+  modelTop->Draw(*shader);
+
+  m = glm::mat4(1.0f);
+  m = glm::translate(m, glm::vec3(0.0f, -5.0f, 0.0f));
+  m = glm::rotate(m, timeR * 2, glm::vec3(1.0f, 0.0f, 0.0f));
+  m = glm::rotate(m, timeR / 2, glm::vec3(0.0f, 1.0f, 0.0f));
+  shader->setMat4("model", glm::value_ptr(m));
+  modelBottom->Draw(*shader);
+
+  m = glm::mat4(1.0f);
+  m = glm::translate(m, glm::vec3(-5.0f, 0.0f, 0.0f));
+  m = glm::rotate(m, timeR * 2, glm::vec3(1.0f, 0.0f, 0.0f));
+  m = glm::rotate(m, timeR / 2, glm::vec3(0.0f, 1.0f, 0.0f));
+  shader->setMat4("model", glm::value_ptr(m));
+  modelLeft->Draw(*shader);
+
+  m = glm::mat4(1.0f);
+  m = glm::translate(m, glm::vec3(5.0f, 0.0f, 0.0f));
+  m = glm::rotate(m, timeR * 2, glm::vec3(1.0f, 0.0f, 0.0f));
+  m = glm::rotate(m, timeR / 2, glm::vec3(0.0f, 1.0f, 0.0f));
+  shader->setMat4("model", glm::value_ptr(m));
+  modelRight->Draw(*shader);
+
+  m = glm::mat4(1.0f);
+  m = glm::translate(m, glm::vec3(0.0f, 0.0f, -5.0f));
+  m = glm::rotate(m, timeR * 2, glm::vec3(1.0f, 0.0f, 0.0f));
+  m = glm::rotate(m, timeR / 2, glm::vec3(0.0f, 1.0f, 0.0f));
+  shader->setMat4("model", glm::value_ptr(m));
+  modelFront->Draw(*shader);
+
+  m = glm::mat4(1.0f);
+  m = glm::translate(m, glm::vec3(0.0f, 0.0f, 5.0f));
+  m = glm::rotate(m, timeR * 2, glm::vec3(1.0f, 0.0f, 0.0f));
+  m = glm::rotate(m, timeR / 2, glm::vec3(0.0f, 1.0f, 0.0f));
+  shader->setMat4("model", glm::value_ptr(m));
+  modelBack->Draw(*shader);
+
   CHECKGLERROR("DrawBrick");
 }
 
